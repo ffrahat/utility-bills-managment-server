@@ -52,7 +52,7 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
-    // await client.connect();
+    await client.connect();
     // client.db("admin").command({ ping: 1 });
     console.log("Your Server is Conected To The MongoDB Database");
     const db = client.db("utility_bill_managment");
