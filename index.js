@@ -133,6 +133,8 @@ app.get("/all-bills", async (req, res) => {
     //   res.send(result)
     // })
 
+    
+
     app.post("/all-bills", async(req, res) => {
       const newBills = req.body;
       const result = await userPendingBillsCollection.insertOne(newBills);
