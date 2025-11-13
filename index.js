@@ -59,12 +59,7 @@ async function run() {
     const userPendingBillsCollection = db.collection("pending_bills");
     const submitedBillsCollection = db.collection("submited_bills");
 
-    // // All Bills
-    // app.get("/all-bills", async (req, res) => {
-    //   const cursor = userPendingBillsCollection.find();
-    //   const result = await cursor.toArray();
-    //   res.send(result);
-    // });
+
 
 
 app.get("/all-bills", async (req, res) => {
@@ -116,6 +111,8 @@ app.get("/all-bills", async (req, res) => {
       const result = await cursor.toArray();
       res.send(result)
     })
+
+
 
 
     app.delete('/submited-bills/:id', async(req, res) => {
