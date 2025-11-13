@@ -52,18 +52,33 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
-    await client.connect();
+    // await client.connect();
     // client.db("admin").command({ ping: 1 });
     console.log("Your Server is Conected To The MongoDB Database");
     const db = client.db("utility_bill_managment");
     const userPendingBillsCollection = db.collection("pending_bills");
+    const submitedBillsCollection = db.collection("submited_bills");
 
-    // All Bills
-    app.get("/all-bills", async (req, res) => {
-      const cursor = userPendingBillsCollection.find();
-      const result = await cursor.toArray();
-      res.send(result);
-    });
+    // // All Bills
+    // app.get("/all-bills", async (req, res) => {
+    //   const cursor = userPendingBillsCollection.find();
+    //   const result = await cursor.toArray();
+    //   res.send(result);
+    // });
+
+
+app.get("/all-bills", async (req, res) => {
+  const category = req.query.category;
+
+  let query = {};
+  if (category && category !== "all-bills") {
+    query.category = { $regex: `^${category}$`, $options: "i" }; // i = ignore case
+  }
+
+  const result = await userPendingBillsCollection.find(query).toArray();
+  res.send(result);
+});
+
 
     // Recent Bills
     app.get("/recent-bills", async (req, res) => {
@@ -75,12 +90,48 @@ async function run() {
 
 
     // Id Wise Data 
-    app.get('/bill-details/:id', async(req, res) => {
+    app.get('/bill-details/:id', async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) }
       const result = await userPendingBillsCollection.findOne(query);
       res.send(result);
+    });
+
+    app.post('/submited-bills', async(req, res) => {
+      const newSubmitedBills = req.body;
+      const result = await submitedBillsCollection.insertOne(newSubmitedBills);
+      res.send(result)
     })
+
+
+    // My Submited Bills
+
+    app.get('/submited-bills', async (req, res) => {
+      const email = req.query.email;
+      const query = {};
+      if (email) {
+        query.email = email;
+      }
+      const cursor = submitedBillsCollection.find(query);
+      const result = await cursor.toArray();
+      res.send(result)
+    })
+
+
+    app.delete('/submited-bills/:id', async(req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) }
+      const result = await submitedBillsCollection.deleteOne(query);
+      res.send(result)
+
+    })
+
+
+    // app.get('/submited-bills', async (req, res) => {
+    //   const cursor = submitedBillsCollection.find();
+    //   const result = await cursor.toArray();
+    //   res.send(result)
+    // })
 
     app.post("/all-bills", async(req, res) => {
       const newBills = req.body;
