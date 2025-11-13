@@ -52,7 +52,7 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
-    await client.connect();
+    // await client.connect();
     // client.db("admin").command({ ping: 1 });
     console.log("Your Server is Conected To The MongoDB Database");
     const db = client.db("utility_bill_managment");
@@ -75,6 +75,7 @@ app.get("/all-bills", async (req, res) => {
 });
 
 
+    //Ok
     // Recent Bills
     app.get("/recent-bills", async (req, res) => {
       const projection = {title : 1 , category: 1, location: 1, created_at: 1}
@@ -122,6 +123,12 @@ app.get("/all-bills", async (req, res) => {
       res.send(result)
 
     })
+
+    // update
+     
+    app.patch('/add-bills2', (req, res) => {
+      res.send({message: 'Ok'})
+    } )
 
 
     // app.get('/submited-bills', async (req, res) => {
