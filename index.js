@@ -129,11 +129,12 @@ app.get("/all-bills", async (req, res) => {
 
     // app.get('/submited-bills', async (req, res) => {
     //   const cursor = submitedBillsCollection.find();
-    //   const result = await cursor.toArray();
+    //   const  result = await cursor.toArray();
     //   res.send(result)
     // })
 
-    
+
+
 
     app.post("/all-bills", async(req, res) => {
       const newBills = req.body;
