@@ -63,7 +63,7 @@ async function run() {
 
 
 app.get("/all-bills", async (req, res) => {
-  const category = req.query.category;
+  const {category} = req.query;
 
   let query = {};
   if (category && category !== "all-bills") {
@@ -113,6 +113,12 @@ app.get("/all-bills", async (req, res) => {
       res.send(result)
     })
 
+
+    app.get('/recent-paid', async (req, res) => {
+      const projection = {name : 1 , category: 1, amount: 1, created_at: 1}
+      const cursor = await submitedBillsCollection.find({}, { projection }).sort({created_at: -1}).limit(8).toArray(); 
+      res.send(cursor)
+    })
 
 
 
